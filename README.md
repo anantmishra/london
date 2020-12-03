@@ -2,8 +2,10 @@
 Lists all the users living in London. By living in London, living within 50 miles of London. The api gets list of users from https://bpdts-test-app.herokuapp.com
 
 ### Documentation
-- springdoc-openapi: `http://localhost:8080/v3/api-docs/`
-- Swagger UI: `http://localhost:8080/swagger-ui.html`
+Assuming that the server is running on `localhost` port `8080`. The documentation is available at following urls:
+- [springdoc-openapi](http://localhost:8080/v3/api-docs/): `http://localhost:8080/v3/api-docs/`
+- [Swagger UI](http://localhost:8080/swagger-ui.html): `http://localhost:8080/swagger-ui.html`
+
 
 ### Building and running
 The project uses maven wrapper for building and running various targets. Please note the following:
