@@ -23,7 +23,7 @@ public class LondonController {
     @RequestMapping(method = RequestMethod.GET, path = "users")
     public User[] getLondonUsers() {
         User[] users = service.getUsers();
-        if (users == null || users.length == 0){
+        if (users == null || users.length < 1) {
             String message = "No user(s) found.";
             logger.warn(message);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, message);
