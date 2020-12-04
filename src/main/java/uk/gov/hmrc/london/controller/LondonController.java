@@ -7,9 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 import uk.gov.hmrc.london.model.User;
 import uk.gov.hmrc.london.service.LondonService;
+
+import static uk.gov.hmrc.london.util.ExceptionUtils.throwResponseStatusException;
 
 @RestController
 @RequestMapping("london")
@@ -23,11 +24,8 @@ public class LondonController {
     @RequestMapping(method = RequestMethod.GET, path = "users")
     public User[] getLondonUsers() {
         User[] users = service.getUsers();
-        if (users == null || users.length < 1) {
-            String message = "No user(s) found.";
-            logger.warn(message);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, message);
-        }
+        if (users == null || users.length < 1)
+            throwResponseStatusException(logger, "No user(s) found.", HttpStatus.NOT_FOUND);
         return users;
     }
 }

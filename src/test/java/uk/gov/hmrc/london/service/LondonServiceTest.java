@@ -1,8 +1,10 @@
 package uk.gov.hmrc.london.service;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.server.ResponseStatusException;
 import uk.gov.hmrc.london.model.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,6 +16,7 @@ class LondonServiceTest {
 
     public static final String TEST_USERS_WITHIN_LONDON_URL = BASE_URL + "/city/Rokiciny/users";
     public static final String TEST_USERS_OUTSIDE_LONDON_URL = BASE_URL + "/city/Kax/users";
+    public static final String TEST_USERS_UNREACHABLE_URL = BASE_URL + "/unreachable";
 
     @Autowired
     private LondonService service;
@@ -38,8 +41,15 @@ class LondonServiceTest {
     }
 
     @Test
-    public void testGetUsersAll(){
+    public void testGetUsersAll() {
         User[] users = service.getUsers();
         assertThat(users).isNotNull().hasSize(3);
+    }
+
+    @Test
+    public void testGetUsersWhenHttpStatusIsNotOk() {
+        Assertions.assertThatThrownBy(() -> {
+            service.getUsers(TEST_USERS_UNREACHABLE_URL, FIFTY_MILES);
+        }).isInstanceOf(ResponseStatusException.class).hasMessageContaining("404 NOT_FOUND");
     }
 }

@@ -3,6 +3,7 @@ package uk.gov.hmrc.london.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -11,6 +12,7 @@ import uk.gov.hmrc.london.model.User;
 import java.util.Arrays;
 
 import static uk.gov.hmrc.london.util.DistanceCalculator.getDistanceFromLondonInMiles;
+import static uk.gov.hmrc.london.util.ExceptionUtils.throwResponseStatusException;
 
 @Service
 public class LondonService {
@@ -31,6 +33,9 @@ public class LondonService {
 
     public User[] getUsers(String url, double distanceInMiles) {
         ResponseEntity<User[]> entity = template.getForEntity(url, User[].class);
+        if (entity.getStatusCode() != HttpStatus.OK)
+            throwResponseStatusException(logger, "Unable to read from url: " + url, entity.getStatusCode());
+
         User[] users = entity.getBody();
         logger.info("Number of user(s) found at [{}]: {}", url, users.length);
         User[] londonUsers = Arrays.stream(users)
