@@ -7,6 +7,7 @@ import uk.gov.hmrc.london.model.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.hmrc.london.service.LondonService.BASE_URL;
+import static uk.gov.hmrc.london.service.LondonService.DISTANCE_FROM_LONDON_IN_MILES;
 
 @SpringBootTest
 class LondonServiceTest {
@@ -19,7 +20,7 @@ class LondonServiceTest {
 
     @Test
     public void testGetUsersWhenLondonUsersExist() {
-        User[] users = service.getUsers(TEST_USERS_WITHIN_LONDON_URL);
+        User[] users = service.getUsers(TEST_USERS_WITHIN_LONDON_URL, DISTANCE_FROM_LONDON_IN_MILES);
         assertThat(users).isNotNull().hasSize(1);
         assertThat(users[0].getId()).isEqualTo(322);
         assertThat(users[0].getFirstName()).isEqualTo("Hugo");
@@ -32,7 +33,7 @@ class LondonServiceTest {
 
     @Test
     public void testGetUsersWhenLondonUsersNotInList() {
-        User[] users = service.getUsers(TEST_USERS_OUTSIDE_LONDON_URL);
+        User[] users = service.getUsers(TEST_USERS_OUTSIDE_LONDON_URL, DISTANCE_FROM_LONDON_IN_MILES);
         assertThat(users).isNotNull().isEmpty();
     }
 
