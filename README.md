@@ -1,5 +1,5 @@
 # london
-Lists all the users living in London. By living in London, living within 50 miles of London. The api gets list of users from https://bpdts-test-app.herokuapp.com
+Lists all the users living in London and within 50 miles of London. The api gets list of users from https://bpdts-test-app.herokuapp.com
 
 ### Documentation
 Assuming that the server is running on `localhost` port `8080`. The documentation is available at following urls:

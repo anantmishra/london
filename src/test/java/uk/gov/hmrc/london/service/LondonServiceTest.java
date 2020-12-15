@@ -22,8 +22,8 @@ class LondonServiceTest {
     private LondonService service;
 
     @Test
-    public void testGetUsersWhenLondonUsersExist() {
-        User[] users = service.getUsers(TEST_USERS_WITHIN_LONDON_URL, FIFTY_MILES);
+    public void testGetUsersWithinMilesOfLondonWhenUsersExist() {
+        User[] users = service.getUsersWithinMilesOfLondon(TEST_USERS_WITHIN_LONDON_URL, FIFTY_MILES);
         assertThat(users).isNotNull().hasSize(1);
         assertThat(users[0].getId()).isEqualTo(322);
         assertThat(users[0].getFirstName()).isEqualTo("Hugo");
@@ -35,21 +35,27 @@ class LondonServiceTest {
     }
 
     @Test
-    public void testGetUsersWhenLondonUsersNotInList() {
-        User[] users = service.getUsers(TEST_USERS_OUTSIDE_LONDON_URL, FIFTY_MILES);
+    public void testGetUsersWithinMilesOfLondonWhenNoUserExistsInList() {
+        User[] users = service.getUsersWithinMilesOfLondon(TEST_USERS_OUTSIDE_LONDON_URL, FIFTY_MILES);
         assertThat(users).isNotNull().isEmpty();
     }
 
     @Test
     public void testGetUsersAll() {
         User[] users = service.getUsers();
-        assertThat(users).isNotNull().hasSize(3);
+        assertThat(users).isNotNull().hasSize(9);
     }
 
     @Test
     public void testGetUsersWhenHttpStatusIsNotOk() {
         Assertions.assertThatThrownBy(() -> {
-            service.getUsers(TEST_USERS_UNREACHABLE_URL, FIFTY_MILES);
+            service.getUsersWithinMilesOfLondon(TEST_USERS_UNREACHABLE_URL, FIFTY_MILES);
         }).isInstanceOf(ResponseStatusException.class).hasMessageContaining("404 NOT_FOUND");
+    }
+
+    @Test
+    public void testGetUsersInCityLondon() {
+        User[] users = service.getUsersInCity(LondonService.CITY_LONDON);
+        assertThat(users).isNotNull().hasSize(6);
     }
 }
